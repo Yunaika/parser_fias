@@ -1,12 +1,12 @@
 from parser_fias.ulits.utils import get_html, get_fias_object
 
 
-def parser_object(url: str, type: str, i=0, districts=None) -> dict:
+def parse_object(url: str, type: str, id=0, districts=None) -> list:
     """
-    Сollection of information about the object
+    Collect of information about the object
     :param url: object url
     :param type: object type
-    :param i: counter
+    :param id: counter
     :param districts: main object
     :return: collection of objects and counter
     """
@@ -17,7 +17,7 @@ def parser_object(url: str, type: str, i=0, districts=None) -> dict:
         if 'Элемент планировочной структуры' in div_item.text:
             break
         for a in div_item.find_all('a'):
-            fias_object = get_fias_object(a, i)
+            fias_object = get_fias_object(a, id)
             if type == 'settlements':
                 # добавить дистрикт id
                 district_name = html.find('h1').text.rsplit(',', 1)[0]
@@ -25,5 +25,5 @@ def parser_object(url: str, type: str, i=0, districts=None) -> dict:
                     if district['name'] == district_name:
                         fias_object['district_id'] = district['id']
             udm_objects.append(fias_object)
-            i += 1
-    return udm_objects, i
+            id += 1
+    return udm_objects, id
