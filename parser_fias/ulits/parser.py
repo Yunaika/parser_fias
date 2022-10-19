@@ -19,10 +19,10 @@ def parse_object(url: str, type: str, id=0, districts=None) -> list:
         for a in div_item.find_all('a'):
             fias_object = get_fias_object(a, id)
             if type == 'settlements':
-                # добавить дистрикт id
+                # добавить id района
                 district_name = html.find('h1').text.rsplit(',', 1)[0]
                 for district in districts:
-                    if district['name'] == district_name:
+                    if district['name'] in district_name:
                         fias_object['district_id'] = district['id']
             udm_objects.append(fias_object)
             id += 1

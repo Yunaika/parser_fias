@@ -30,7 +30,7 @@ def parse_settlements_and_save_it_to_csv(districts: list) -> list:
         if district['type'] == 'Город':
             pass
         else:
-            settlement, i = parse_object(f'{os.getenv("BASE_URL")}/{district["fias_id"]}', 'settlements', id, districts)
+            settlement, id = parse_object(f'{os.getenv("BASE_URL")}/{district["fias_id"]}', 'settlements', id, districts)
             settlements += settlement
 
     file_name = create_csv_file_name('settlements')
