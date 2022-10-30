@@ -1,3 +1,6 @@
+import os
+from copy import deepcopy
+from dotenv import load_dotenv
 from parser_fias.ulits.utils import get_html, get_fias_object
 
 
@@ -27,3 +30,40 @@ def parse_object(url: str, type: str, id=0, districts=None) -> list:
             udm_objects.append(fias_object)
             id += 1
     return udm_objects, id
+
+
+def parse_districts(fias_id: str) -> list:
+    """
+    Parse districts from subject of the Russian Federation by fias id
+    :param fias_id: id of subject
+    :return: collection of districts of the subject of the Russian Federation
+    """
+    load_dotenv()
+    districts = parse_object(f'{os.getenv("BASE_URL")}/{fias_id}', 'districts')[0]
+
+    return districts
+
+
+def parse_settlements(districts: list) -> list:
+    """
+    Parse settlements from all districts in subject of the Russian Federation by fias id
+    and save it to csv-file
+    :param districts: collection of districts of the subject of the Russian Federation
+    :return: collection of settlements of districts
+    """
+    settlements, cities = [], []
+    id = 0
+    for district in districts:
+        if district['type'] == 'Городской округ':
+            city = deepcopy(district)
+            city['district_id'] = district['id']
+            city['id'] = id
+            city['type'] = 'Город'
+            id += 1
+            settlements.append(city)
+        else:
+            settlement, id = parse_object(f'{os.getenv("BASE_URL")}/{district["fias_id"]}', 'settlements',
+                                          id, districts)
+            settlements += settlement
+
+    return settlements

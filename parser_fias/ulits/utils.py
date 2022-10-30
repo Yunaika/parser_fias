@@ -32,6 +32,6 @@ def get_fias_object(a, id) -> dict:
     object_name_and_type = get_object_name_and_type(a.text)
     object['id'] = id
     object['name'] = object_name_and_type[0]
-    object['type'] = object_name_and_type[1]
+    object['type'] = object_name_and_type[1] if object_name_and_type[1] != 'Город' else 'Городской округ'
     object['fias_id'] = a["href"].replace('/', '')
     return object
