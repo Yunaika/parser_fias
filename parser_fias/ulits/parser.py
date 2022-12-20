@@ -58,7 +58,7 @@ def parse_settlements(districts: list) -> list:
             city = deepcopy(district)
             city['district_id'] = district['id']
             city['id'] = id
-            city['type'] = 'Город'
+            city['type'] = 'г.'
             id += 1
             settlements.append(city)
         else:
